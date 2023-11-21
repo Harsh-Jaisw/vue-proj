@@ -1,16 +1,25 @@
 <script setup>
-import { onMounted,ref } from 'vue';
+import axios from 'axios';
+import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
-const param=ref(0)
-onMounted(()=>{
+const param = ref(0)
+const list = ref([])
+onMounted(() => {
   const route = useRoute();
-  console.log(route.params)
-  param.value=route.params
+  param.value = route.params
+  axios.get(`https://reqres.in/api/users?page=${param.value.id}`).then((res) => { list.value = res.data.data })
 })
 </script>
 <template>
   <div class="item">
-Welcome Component to {{ param.name}} this is your id - {{ param.id }}
+
+    Welcome Component to {{ param.name }} this is your Data for id - {{ param.id }}
+
+    <div v-for="item in list" :key="item.id">
+      <p>{{ item.email }}</p>
+      <p> {{ item.first_name }} {{ item.last_name }} </p>
+      <img height="60" :src=item.avatar />
+    </div>
   </div>
 </template>
 
