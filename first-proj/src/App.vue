@@ -4,11 +4,14 @@ import HelloWorld from './components/HelloWorld.vue';
 </script>
 
 <template>
-  <RouterLink to="/Hello">HelloWorld</RouterLink>
+  <RouterLink to="/">HelloWorld</RouterLink>
   <br><br>
   <RouterLink to="/Mycomponent">Mycomponent</RouterLink>
+  <br><br>
+  <RouterLink to="/Welcome/1/harsh">Welcome</RouterLink>
+  <br><br>
   <RouterView/>
-  <HelloWorld :msg="2332"/>
+  <!-- <HelloWorld :msg="2332"/> -->
 </template>
 
 <!-- <style scoped>

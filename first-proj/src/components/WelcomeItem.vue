@@ -1,14 +1,16 @@
+<script setup>
+import { onMounted,ref } from 'vue';
+import { useRoute } from 'vue-router';
+const param=ref(0)
+onMounted(()=>{
+  const route = useRoute();
+  console.log(route.params)
+  param.value=route.params
+})
+</script>
 <template>
   <div class="item">
-    <i>
-      <slot name="icon"></slot>
-    </i>
-    <div class="details">
-      <h3>
-        <slot name="heading"></slot>
-      </h3>
-      <slot></slot>
-    </div>
+Welcome Component to {{ param.name}} this is your id - {{ param.id }}
   </div>
 </template>
 
