@@ -1,36 +1,35 @@
 <script setup>
 import { ref } from 'vue';
+import { useTaskStore } from '../Store/TaskManager';
 
-const posts = ref([
-])
+const message = ref("")
+const checkbox = ref(false)
+const editValue = ref("")
+const taskStore=useTaskStore()
 function handleTask() {
-  let obj = { label: message.value, priority: checkbox.value }
+  let obj = { task: message.value, priority: checkbox.value ,edited:false,id:Math.random()*9999}
   if (message.value !== "") {
-    console.log(message.value)
-    posts.value.push(obj)
-    console.log(posts.value)
+    taskStore.adTask(obj)
   }
   message.value = ""
   checkbox.value = false
 }
-const message = ref("")
-const checkbox = ref(false)
-const editValue = ref("")
+
 function handleEdit(data) {
-  posts.value.forEach((item) => {
-    if (item == data) {
-      item.edited = true
-    }
-  })
+  taskStore.editTask(data)
 }
+
 function handleEditValue(data) {
-  posts.value.forEach((item) => {
+  taskStore.tasks.forEach((item) => {
     if (item === data) {
-      item.label = editValue.value
+      item.task = editValue.value
       item.edited = false
       editValue.value = ""
     }
   })
+}
+function handleDelete(data){
+  taskStore.delTask(data)
 }
 </script>
 
@@ -38,13 +37,23 @@ function handleEditValue(data) {
   <input v-model="message" placeholder="Add Task" />
   <input v-model="checkbox" type="checkbox" />
   <button v-on:click="handleTask">Submit</button>
-  <div v-for="item, index in posts" :key="index" :class="{ priority: item.priority }">
+  <button @click="taskStore.$reset">Reset Store</button>
+  <div v-for="item, index in taskStore.tasks" :key="index" :class="{ priority: item.priority }">
+    <div :style="{display:'flex' ,alignItems:'center',gap:'10px'}">
+
+   
     <p @click="handleEdit(item)">
 
-      {{ item.label }}
-    </p>
+      {{ item.task }}
+    </p> 
+    <button @click="handleDelete(item)">Delete Task</button>
+  </div>
     <input v-if="item.edited" v-model="editValue" />
     <button v-if="item.edited" @click="handleEditValue(item)">Edit</button>
+  </div>
+  <p :style="{color:'green'}">Priority Task</p>
+  <div v-for="item,index in taskStore.priority" :key="index">
+   <p>{{ item.task }}</p>
   </div>
 </template>
 <style scoped>

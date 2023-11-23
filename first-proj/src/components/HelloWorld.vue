@@ -1,6 +1,7 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 import axios from "axios"
+import { useTaskStore } from '../Store/TaskManager';
 defineProps({
   // msg: {
   //   type: Number,
@@ -8,7 +9,15 @@ defineProps({
   // }
 })
 const dummyData = ref([])
+const count =ref(0)
+// setTimeout(()=>{
+//   count.value=count.value+1
+// },count.value)
+// watch(count,(newValue,oldValue)=>{
+//     console.log(newValue)
+// })
 const toggle = ref(true)
+const taskStore=useTaskStore()
 onMounted(() => {
   fetch('https://hub.dummyapis.com/employee?noofRecords=10&idStarts=1001')
     .then((res) => res.json())
@@ -41,7 +50,9 @@ const hasError = ref(true)
       <a href="https://vitejs.dev/" target="_blank" rel="noopener">Vite</a> +
       <a href="https://vuejs.org/" target="_blank" rel="noopener">Vue 3</a>.
     </h3>
+    <button @click="count=count+1">Increase</button>
     <!-- <p>{{ dummyData }}</p> -->
+    <p>Welcome , {{ taskStore.name }}</p>
     <button v-on:click="() => postData('This is the dummy post for test')">Post Data</button>
   </div>
   <button v-on:click="() => handleToggle()">Toogle Content</button>
